@@ -6,7 +6,7 @@ The main goal of this project is **to simplify** and **speed up** the process of
 
 ## Installation
 
-1. Run VTFCmdContext.bat as an administrator to install the necessary associations in the system
+1. Run `VTFCmdContext.bat` **as an administrator** to install the necessary associations in the system
 
 ## Known issues
 
