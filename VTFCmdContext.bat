@@ -47,6 +47,7 @@ if %x64% == true (
   copy /Y "%~dp0\bin\x64\DevIL.dll" "%x64p%"
   copy /Y "%~dp0\bin\x64\VTFLib.dll" "%x64p%"
   copy /Y "%~dp0\bin\icon.ico" "%x64p%"
+  copy /Y "%~dp0\UnistallContext.bat" "%x64p%"
 ) else (
   REM Создание папки %ProgramFiles(x86)%\VTFCmdContext, если она не существует
   title VTFCmdContext - Creating folder "%x86p%"...
@@ -57,6 +58,7 @@ if %x64% == true (
   copy /Y "%~dp0\bin\x64\DevIL.dll" "%x86p%"
   copy /Y "%~dp0\bin\x64\VTFLib.dll" "%x86p%"
   copy /Y "%~dp0\bin\icon.ico" "%x86p%"
+  copy /Y "%~dp0\UnistallContext.bat" "%x86p%"
 )
 
 REM Теперь присваеваем открытие этого файла
