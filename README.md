@@ -8,6 +8,8 @@ The main goal of this project is **to simplify** and **speed up** the process of
 
 1. Run `VTFCmdContext.bat` **as an administrator** to install the necessary associations in the system
 
+2. Done. If you need to **delete the association**, just run `UnistallContext.bat` **as an administrator**
+
 ## Known issues
 
 1. When converting, **the console window appears** for a moment
@@ -19,3 +21,5 @@ The main goal of this project is **to simplify** and **speed up** the process of
 The **Neil Jedrzejewski** and **Ryan Gregg** software used in this project is licensed under the **GPL** (**General Public License**). Please see the **[GPL.txt](GPL.txt)** file for more information
 
 The rest of the code (my code) in this project is provided with no license. You are free to use, modify, or distribute it without any restrictions. However, **please note** that I do not provide any warranties or guarantees for this code. **Use it at your own risk!**
+
+###### * This text, like the utility itself, was written and translated using ChatGPT-3.5!
