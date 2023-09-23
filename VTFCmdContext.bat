@@ -33,59 +33,64 @@ if %errorlevel% == 1 (
 title VTFCmdContext - Installing...
 
 set "ExportTo=HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\ExportTo"
+set "SFA=HKEY_CLASSES_ROOT\SystemFileAssociations\.vtf\shell\ExportTo"
+set "x64p=%ProgramFiles%\VTFCmdContext"
+set "x86p=%ProgramFiles(x86)%\VTFCmdContext"
 
 if %x64% == true (
   REM Создание папки %ProgramFiles%\VTFCmdContext, если она не существует
-  title VTFCmdContext - Creating folder "%ProgramFiles%\VTFCmdContext"...
-  if not exist "%ProgramFiles%\VTFCmdContext" mkdir "%ProgramFiles%\VTFCmdContext"
+  title VTFCmdContext - Creating folder "%x64p%"...
+  if not exist "%x64p%" mkdir "%x64p%"
   REM Перенос .exe файла в %ProgramFiles%\VTFCmdContext
-  title VTFCmdContext - Moving "bin\x64\VTFCmd.exe" to "%ProgramFiles%\VTFCmdContext"...
-  copy /Y "%~dp0\bin\x64\VTFCmd.exe" "%ProgramFiles%\VTFCmdContext"
-  copy /Y "%~dp0\bin\x64\DevIL.dll" "%ProgramFiles%\VTFCmdContext"
-  copy /Y "%~dp0\bin\x64\VTFLib.dll" "%ProgramFiles%\VTFCmdContext"
-  copy /Y "%~dp0\bin\icon.ico" "%ProgramFiles%\VTFCmdContext"
+  title VTFCmdContext - Moving "bin\x64\VTFCmd.exe" to "%x64p%"...
+  copy /Y "%~dp0\bin\x64\VTFCmd.exe" "%x64p%"
+  copy /Y "%~dp0\bin\x64\DevIL.dll" "%x64p%"
+  copy /Y "%~dp0\bin\x64\VTFLib.dll" "%x64p%"
+  copy /Y "%~dp0\bin\icon.ico" "%x64p%"
 ) else (
   REM Создание папки %ProgramFiles(x86)%\VTFCmdContext, если она не существует
-  title VTFCmdContext - Creating folder "%ProgramFiles(x86)%\VTFCmdContext"...
-  if not exist "%ProgramFiles(x86)%\VTFCmdContext" mkdir "%ProgramFiles(x86)%\VTFCmdContext"
+  title VTFCmdContext - Creating folder "%x86p%"...
+  if not exist "%x86p%" mkdir "%x86p%"
   REM Перенос .exe файла в %ProgramFiles(x86)%\VTFCmdContext
-  title VTFCmdContext - Moving "bin\x86\VTFCmd.exe" to "%ProgramFiles(x86)%\VTFCmdContext"...
-  copy /Y "%~dp0\bin\x86\VTFCmd.exe" "%ProgramFiles(x86)%\VTFCmdContext"
-  copy /Y "%~dp0\bin\x64\DevIL.dll" "%ProgramFiles(x86)%\VTFCmdContext"
-  copy /Y "%~dp0\bin\x64\VTFLib.dll" "%ProgramFiles(x86)%\VTFCmdContext"
-  copy /Y "%~dp0\bin\icon.ico" "%ProgramFiles(x86)%\VTFCmdContext"
+  title VTFCmdContext - Moving "bin\x86\VTFCmd.exe" to "%x86p%"...
+  copy /Y "%~dp0\bin\x86\VTFCmd.exe" "%x86p%"
+  copy /Y "%~dp0\bin\x64\DevIL.dll" "%x86p%"
+  copy /Y "%~dp0\bin\x64\VTFLib.dll" "%x86p%"
+  copy /Y "%~dp0\bin\icon.ico" "%x86p%"
 )
 
 REM Теперь присваеваем открытие этого файла
 title VTFCmdContext - Adding context menu folder...
-REG ADD "HKEY_CLASSES_ROOT\SystemFileAssociations\.vtf\shell\ExportTo" /v "MUIVerb" /t REG_SZ /d "Export to..." /f
-REG ADD "HKEY_CLASSES_ROOT\SystemFileAssociations\.vtf\shell\ExportTo" /v "SubCommands" /t REG_SZ /d "ExportToBMP;ExportToJPG;ExportToPNG;ExportToTGA" /f
+REG ADD "%SFA%" /v "MUIVerb" /t REG_SZ /d "Export to..." /f
+REG ADD "%SFA%" /v "SubCommands" /t REG_SZ /d "ExportToBMP;ExportToJPG;ExportToPNG;ExportToTGA" /f
 
 title VTFCmdContext - Assign icon...
 REM Применяем иконки
 if %x64% == true (
-  REG ADD "HKEY_CLASSES_ROOT\SystemFileAssociations\.vtf\shell\ExportTo" /v "Icon" /d "%ProgramFiles%\VTFCmdContext\icon.ico" /f
+  REG ADD "%SFA%" /v "Icon" /d "%x64p%\icon.ico" /f
 ) else (
-  REG ADD "HKEY_CLASSES_ROOT\SystemFileAssociations\.vtf\shell\ExportTo" /v "Icon" /d "%ProgramFiles(x86)%\VTFCmdContext\icon.ico" /f
+  REG ADD "%SFA%" /v "Icon" /d "%x86p%\icon.ico" /f
 )
 
+REM Добавляем кнопочки
 title VTFCmdContext - Adding context menu items...
 REG ADD "%ExportTo%BMP" /ve /d "Export to .bmp" /f
 REG ADD "%ExportTo%JPG" /ve /d "Export to .jpg" /f
 REG ADD "%ExportTo%PNG" /ve /d "Export to .png" /f
 REG ADD "%ExportTo%TGA" /ve /d "Export to .tga" /f
 
+REM Добавляем команды к кнопочкам
 title VTFCmdContext - Adding context menu commands...
 if %x64% == true (
-  REG ADD "%ExportTo%BMP\command" /ve /d "%ProgramFiles%\VTFCmdContext\vtfcmd.exe\" -silent -file \"%%V\" -exportformat bmp" /f
-  REG ADD "%ExportTo%JPG\command" /ve /d "%ProgramFiles%\VTFCmdContext\vtfcmd.exe\" -silent -file \"%%V\" -exportformat jpg" /f
-  REG ADD "%ExportTo%PNG\command" /ve /d "%ProgramFiles%\VTFCmdContext\vtfcmd.exe\" -silent -file \"%%V\" -exportformat png" /f
-  REG ADD "%ExportTo%TGA\command" /ve /d "%ProgramFiles%\VTFCmdContext\vtfcmd.exe\" -silent -file \"%%V\" -exportformat tga" /f
+  REG ADD "%ExportTo%JPG\command" /ve /d "%x64p%\vtfcmd.exe -silent -file \"%%V\" -exportformat jpg" /f
+  REG ADD "%ExportTo%BMP\command" /ve /d "%x64p%\vtfcmd.exe -silent -file \"%%V\" -exportformat bmp" /f
+  REG ADD "%ExportTo%PNG\command" /ve /d "%x64p%\vtfcmd.exe -silent -file \"%%V\" -exportformat png" /f
+  REG ADD "%ExportTo%TGA\command" /ve /d "%x64p%\vtfcmd.exe -silent -file \"%%V\" -exportformat tga" /f
 ) else (
-  REG ADD "%ExportTo%BMP\command" /ve /d "%ProgramFiles(x86)%\VTFCmdContext\vtfcmd.exe\" -silent -file \"%%V\" -exportformat bmp" /f
-  REG ADD "%ExportTo%JPG\command" /ve /d "%ProgramFiles(x86)%\VTFCmdContext\vtfcmd.exe\" -silent -file \"%%V\" -exportformat jpg" /f
-  REG ADD "%ExportTo%PNG\command" /ve /d "%ProgramFiles(x86)%\VTFCmdContext\vtfcmd.exe\" -silent -file \"%%V\" -exportformat png" /f
-  REG ADD "%ExportTo%TGA\command" /ve /d "%ProgramFiles(x86)%\VTFCmdContext\vtfcmd.exe\" -silent -file \"%%V\" -exportformat tga" /f
+  REG ADD "%ExportTo%BMP\command" /ve /d "%x86p%\vtfcmd.exe -silent -file \"%%V\" -exportformat bmp" /f
+  REG ADD "%ExportTo%JPG\command" /ve /d "%x86p%\vtfcmd.exe -silent -file \"%%V\" -exportformat jpg" /f
+  REG ADD "%ExportTo%PNG\command" /ve /d "%x86p%\vtfcmd.exe -silent -file \"%%V\" -exportformat png" /f
+  REG ADD "%ExportTo%TGA\command" /ve /d "%x86p%\vtfcmd.exe -silent -file \"%%V\" -exportformat tga" /f
 )
 
 REM Всё готово!
